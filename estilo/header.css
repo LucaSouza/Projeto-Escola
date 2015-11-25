@@ -117,6 +117,7 @@ header{
     color: #1A2733;
     border: solid 1.5px #1A2733;
     margin-top: 1rem;
+    padding: 0rem;
 }
 
 #form>input{
@@ -124,7 +125,7 @@ header{
 }
 
 .input100{
-    width: 100%;
+    width: 99.9%;
 }
 .input80{
     width: 80%;
@@ -145,17 +146,20 @@ header{
     width: 30%;
 }
 .input20{
-    width: 21%;
+    width: 18.2%;
 }
 .input25{
-    width: 24%;
+    width: 24.07%;
 }
 .input10{
-    width: 10%;
+    width: 9.07%;
 }
 
-.marginleft10{
-    margin-left: 6.63%;
+.input5{
+    width: 5%;
+}
+.marginleft{
+    margin-left: 0.259%;
 }
 .floatright{
     float: right;
