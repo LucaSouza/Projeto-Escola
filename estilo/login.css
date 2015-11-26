@@ -1,27 +1,30 @@
+@import url(https://fonts.googleapis.com/css?family=Raleway:400,100,200,500,300,600,700,800,900);
+
 html{
-    font-family: sans-serif;
-    font-size: 100%;
+    font-family: 'Raleway', sans-serif;
+    font: 18px/27px;
 }
 
 body{
     margin: 0;
     width: 100%;
     height: 100%;
-    background-color: cornsilk;
+    background-color: #f5f5f5;
 }
 
 #form-logar{
-    border: solid 2px black;
-    width: 40%;
-    margin-left: 30%;
+    width: 30%;
+    margin-left: 35%;
     margin-top: 10%;
-    height: 50%;
+    height: 70%;
+    background-color: #1A2733;
 }
 
 #logo{
     text-align: center;
     padding: 2rem;
-    background-color: aqua;
+    color: #f5f5f5;
+    font-size: 2rem;
 }
 
 input{
@@ -31,8 +34,24 @@ input{
     margin-left: 13%;
     padding: 0.8rem;
     font-size: 1rem;
+    border: none;
 }
 
+.input-form::-webkit-input-placeholder{
+   color: #1A2733;
+}
+
+.input-form:-moz-placeholder { /* Firefox 18- */
+   color: #1A2733;  
+}
+
+.input-form::-moz-placeholder {  /* Firefox 19+ */
+   color: #1A2733;  
+}
+
+.input-form:-ms-input-placeholder {  
+   color: #1A2733;  
+}
 #entrar{
     width: 40%;
     margin-left: 30%;
@@ -42,8 +61,12 @@ input{
     font-size: 1rem;
     padding-top: 1rem;
     padding-bottom:1rem;
+    opacity: 0.9;
+    border-radius: 0.2rem;
 }
-
+#entrar:hover{
+    opacity: 1;
+}
 
 
 

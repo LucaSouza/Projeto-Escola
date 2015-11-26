@@ -148,6 +148,23 @@ header{
     -webkit-transition: all 200ms;
     transition: all 200ms;
 }
+
+.input-form::-webkit-input-placeholder{
+   color: #1A2733;
+}
+
+.input-form:-moz-placeholder { /* Firefox 18- */
+   color: #1A2733;  
+}
+
+.input-form::-moz-placeholder {  /* Firefox 19+ */
+   color: #1A2733;  
+}
+
+.input-form:-ms-input-placeholder {  
+   color: #1A2733;  
+}
+
 .input1{
     width: 99%;
 }
