@@ -91,6 +91,7 @@ header{
     border-bottom-left-radius: 0.4rem;
     border-bottom-right-radius: 0.4rem;
     padding: 2rem;
+    padding-bottom: 6rem;
 }
 #cabecario-formulario{
     background-color: #1A2733;
@@ -101,75 +102,64 @@ header{
     border-top-left-radius: 0.4rem;
     border-top-right-radius: 0.4rem;
 }
-
 #container-formulario{
-    width: 70%;
+    width: 66%;
     margin: 0 auto;
     margin-top: 2.5%;
-    -webkit-box-shadow: -1px 1px 12px 1px rgba(0,0,0,0.3);
-    -moz-box-shadow: -1px 1px 12px 1px rgba(0,0,0,0.3);
-    box-shadow: -1px 1px 12px 1px rgba(0,0,0,0.3);
+    -webkit-box-shadow: -1px 1px 10px 1px rgba(0,0,0,0.2);
+    -moz-box-shadow: -1px 1px 10px 1px rgba(0,0,0,0.2);
+    box-shadow: -1px 1px 10px 1px rgba(0,0,0,0.2);
     border-radius: 0.4rem;
 }
 .input-form{
     display: inline-block;
-    height: 2rem;
+    height: 2.5rem;
     color: #1A2733;
     border: solid 1.5px #1A2733;
     margin-top: 1rem;
-    padding: 0rem;
+    padding: 0.2rem;
+    font-size: 1.1rem;
+    border-radius: 0.2rem;
 }
 
-#form>input{
-    font-size: 1rem;
+#botao-form{
+    border: none;
+    color: #fff;
+    background-color:#1A2733;
+    font-size: 1.2rem;
+    padding: 1.2rem 4rem 1.2rem 4rem;
+    text-align: center;
+    position: absolute;
+    border-radius: 0.2rem;
+    margin-left: 25%;
+    margin-top: -2.5%;
+    margin-bottom: 5%;
+    opacity: 0.95;
+    
 }
-
-.input100{
-    width: 99.9%;
+#botao-form:hover{
+    opacity: 1;
+    -moz-transition: all 200ms;
+    -webkit-transition: all 200ms;
+    transition: all 200ms;
 }
-.input80{
-    width: 80%;
+.input1{
+    width: 99%;
 }
-.input70{
-    width: 70%;
+.input2{
+    width: 48.25%;
 }
-.input60{
-    width: 60%;
+.input3{
+    width: 23.3%;
 }
-.input50{
-    width: 50%;
+.input4{
+    width: 12%;
 }
-.input40{
-    width: 40%;
-}
-.input30{
-    width: 30%;
-}
-.input20{
-    width: 18.2%;
-}
-.input25{
-    width: 24.07%;
-}
-.input10{
-    width: 9.07%;
-}
-
 .input5{
-    width: 5%;
+    width: 33.7%;
 }
-.marginleft{
-    margin-left: 0.259%;
-}
-.floatright{
-    float: right;
-    margin-top: 1rem;
-}
-.marginleft5{
-    margin-left: 5%;
-}
-.marginleft2{
-    margin-left: 2%;
+.marginleft1{
+    margin-left: 1.4%;
 }
 
 
