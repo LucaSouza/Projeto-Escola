@@ -8,9 +8,7 @@
 <body>
     <div id="content">
         <?php include "header.php"?>
-        <main id="main">
-            
-        </main>
+        <main id="main"></main>
         <footer id="footer"></footer>
     </div>
 </body>

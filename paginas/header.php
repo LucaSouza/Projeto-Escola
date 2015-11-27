@@ -7,6 +7,9 @@
         <h1>Projeto</h1>
     </div>
     <div id="usuario">
-        <span>LU</span>
+        <span><?php 
+        session_start();
+        echo strtoupper(substr($_SESSION['usuarioNome'], 0, 2));?>
+        </span>
     </div>
 </header>
