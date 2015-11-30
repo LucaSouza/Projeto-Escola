@@ -1,124 +1,130 @@
 <?php
-/**
-* Sistema de segurança com acesso restrito
-*
-* Usado para restringir o acesso de certas páginas do seu site
-*
-* @author Thiago Belem <contato@thiagobelem.net>
-* @link http://thiagobelem.net/
-*
-* @version 1.0
-* @package SistemaSeguranca
-*/
 
-//  Configurações do Script
-// ==============================
-//$_SG['conectaServidor'] = true;    // Abre uma conexão com o servidor MySQL?
-//$_SG['abreSessao'] = true;         // Inicia a sessão com um session_start()?
+//@param $_seguranca - Array utilizado para armazenar atributos para manipulação do banco de dados
 
-//$_SG['caseSensitive'] = false;     // Usar case-sensitive? Onde 'thiago' é diferente de 'THIAGO'
-
-$_SG['validaSempre'] = true;       // Deseja validar o usuário e a senha a cada carregamento de página?
-// Evita que, ao mudar os dados do usuário no banco de dado o mesmo contiue logado.
-
-
-
-//$_SG['paginaLogin'] = '/index.php'; // Página de login
-
-//$_SG['tabela'] = 'adm';       // Nome da tabela onde os usuários são salvos
-// ==============================
-
-// ======================================
-//   ~ Não edite a partir deste ponto ~
-// ======================================
-function conectar(){
-    $_SG['servidor'] = 'localhost';    // Servidor MySQL
-    $_SG['usuario'] = 'root';          // Usuário MySQL
-    $_SG['senha'] = 'root';                // Senha MySQL
-    $_SG['banco'] = 'apae';            // Banco de dados MySQL
-    $conexao = mysql_connect($_SG['servidor'],$_SG['usuario'],$_SG['senha']);
-    mysql_select_db($_SG['banco']);
-    return $conexao;
-}
+$_seguranca['Sessao'] = true;              // utilizado para iniciar a sessão session_start()
+$_seguranca['servidor'] = 'localhost';    // Servidor MySQL
+$_seguranca['usuario'] = 'root';          // Usuário MySQL
+$_seguranca['senha'] = 'root';            // Senha MySQL
+$_seguranca['banco'] = 'apae';            // Banco de dados MySQL
+$_seguranca['tabela'] = 'adm';            // Nome da tabela onde os usuários são salvos
 
 // Verifica se precisa iniciar a sessão
-//if ($_SG['abreSessao'] == true){
-//  session_start();
-//}
-//    return true;
-//}
-/**
-* Função que valida um usuário e senha
-*
-* @param string $usuario - O usuário a ser validado
-* @param string $senha - A senha a ser validada
-*
-* @return bool - Se o usuário foi validado ou não (true/false)
+if ($_seguranca['Sessao']){
+  session_start();
+}
+
+// Conecta ao banco de dados
+//@return $conexão - a conexao for feita com sucesso ou false para sem sucesso
+function conectar(){
+    global $_seguranca;
+    $conexao = mysql_connect($_seguranca['servidor'],$_seguranca['usuario'],$_seguranca['senha']);
+    mysql_select_db($_seguranca['banco']);
+    if($conexao){
+        return $conexao;    
+    }else{
+        return false;
+    }
+}
+
+//Desconecta ao banco de dados
+function desconexao(){
+    global $_seguranca;
+    mysql_close($_seguranca['banco']);
+}
+
+/*
+  Função que recebe a validacao do metodo verificaSenhaLogin e cria sessão
+  @param string $usuario - O usuário a ser validado
+  @param string $senha - A senha a ser validada
+  @return bool - Se o usuário foi validado ou não (true/false)
 */
+
 function validaUsuario($usuario, $senha) {
-    global $_SG;
-  $_SG['tabela'] = 'adm';       // Nome da tabela onde os usuários são salvos
-  // Usa a função addslashes para escapar as aspas sql injector
-  $nusuario = addslashes($usuario);
-  $nsenha = addslashes($senha);
+  //Chamada de método para verificar senha e login do usuário    
+  $resultadoValida = verificaSenhaLogin($usuario, $senha);
 
-  // Monta uma consulta SQL (query) para procurar um usuário
-  $sql = "SELECT `id_adm`, `registro_adm` FROM `".$_SG['tabela']."` WHERE `registro_adm` = '".$nusuario."' AND `senha_adm` = '".$nsenha."' LIMIT 1";
-  $query = mysql_query($sql);
-  $resultado = mysql_fetch_assoc($query);
-
-  // Verifica se encontrou algum registro
-  if (empty($resultado)) {
-    // Nenhum registro foi encontrado => o usuário é inválido
-    return false;
-  } else {
-    session_start();
-    // Definimos dois valores na sessão com os dados do usuário
-    $_SESSION['usuarioID'] = $resultado['id_adm']; // Pega o valor da coluna 'id do registro encontrado no MySQL
-    $_SESSION['usuarioNome'] = $resultado['registro_adm']; // Pega o valor da coluna 'nome' do registro encontrado no MySQL
-
-    // Verifica a opção se sempre validar o login
-    if ($_SG['validaSempre'] == true) {
-      // Definimos dois valores na sessão com os dados do login
-      $_SESSION['usuarioLogin'] = $usuario;
-      $_SESSION['usuarioSenha'] = $senha;
-    }
+  //Verifica se encontrou algum registro
+  if (empty($resultadoValida)) {
+      return false;
+  }else{
+     // Valores atribuidos a sessao do usuario id e nome
+     $_SESSION['usuarioID'] = $resultadoValida['id_adm']; // Pega o valor da coluna 'id do registro encontrado no MySQL
+     $_SESSION['usuarioNome'] = $resultadoValida['registro_adm']; // Pega o valor da coluna 'nome' do registro encontrado no MySQL
+      
+      // Valores atribuidos a sessao do login senha e usuario para poder fazer a comparação a cada página carregada
+      $_SESSION['usuarioLogin'] = addslashes($usuario);
+      $_SESSION['usuarioSenha'] = addslashes($senha);
 
     return true;
   }
 }
 
-/**
-* Função que protege uma página
+/*
+  Função que valida o usuário e senha
+  @param string $usuario - O usuário a ser validado
+  @param string $senha - A senha a ser validada
+  @return $resultado quando o usuário existe e false quando o usuario não existe
 */
+
+function verificaSenhaLogin($usuario, $senha){
+    global $_seguranca; 
+    //Conectar ao banco de dados
+    conectar();
+    
+    // Funçao addslashes é utilizada para escapar do sql injector
+    $nusuario = addslashes($usuario);
+    $nsenha = addslashes($senha);
+    
+    // SQL para procurar um usuário
+    $sql = "SELECT `id_adm`, `registro_adm` FROM `".$_seguranca['tabela']."` WHERE `registro_adm` = '".$nusuario."' AND `senha_adm` = '".$nsenha."' LIMIT 1";
+    $query = mysql_query($sql);
+    $resultado = mysql_fetch_assoc($query);
+    
+    //Desconectar do banco de dados
+    desconexao();
+    
+    if (!empty($resultado)){
+        return $resultado;
+    }else{
+        return false; 
+    }
+}
+
+//Função que protege uma página
+
 function protegePagina() {
-  $_SG['validaSempre'] = true;
-
-  if (!isset($_SESSION['usuarioID']) OR !isset($_SESSION['usuarioNome'])) {
-    // Não há usuário logado, manda pra página de login
-    return expulsaVisitante();
-  } else if (isset($_SESSION['usuarioID']) && isset($_SESSION['usuarioNome'])) {
-    // Há usuário logado, verifica se precisa validar o login novamente
-    if ($_SG['validaSempre'] == true) {
-      // Verifica se os dados salvos na sessão batem com os dados do banco de dados
-      if (!validaUsuario($_SESSION['usuarioLogin'], $_SESSION['usuarioSenha'])) {
-        // Os dados não batem, manda pra tela de login
+  global $_seguranca;
+  
+    if (!isset($_SESSION['usuarioID']) or !isset($_SESSION['usuarioNome'])) {
+        // Não há usuário logado, manda pra página de login
         return expulsaVisitante();
-      }
+    }else{ 
+        if(isset($_SESSION['usuarioID']) and isset($_SESSION['usuarioNome'])){
+            if(verificaSenhaLogin($_SESSION['usuarioLogin'],$_SESSION['usuarioSenha'])!=false){
+                // Os dados batem, manda pra tela principal
+                return true;
+            }else{
+                // Os dados não batem, manda pra página de login
+                return expulsaVisitante();
+            }
+        }
     }
-  }
-    return true;
+    return false;
 }
 
-/**
-* Função para expulsar um visitante
-*/
-function expulsaVisitante() {
-  global $_SG;
+//Função para retornar ao login caso a sessão expire ou tenha inconsistência de dados
 
-  // Remove as variáveis da sessão (caso elas existam)
+function retornaLogin(){
+  
+  // Remove sessão
   unset($_SESSION['usuarioID'], $_SESSION['usuarioNome'], $_SESSION['usuarioLogin'], $_SESSION['usuarioSenha']);
 
-  // Manda pra tela de login
   return false;
 }
+    
+?>
+
+
+
+

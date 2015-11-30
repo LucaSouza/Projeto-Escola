@@ -10,7 +10,7 @@ if(empty($usuario) || empty($senha)){
 }else{
     if(conectar()){
         if(validaUsuario($usuario, $senha)){
-            echo "true";
+            echo '1';
         }else{
             echo "Usuario Inexistente";
         }
